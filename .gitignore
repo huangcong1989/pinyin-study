@@ -1,0 +1,9 @@
+node_modules/
+.screenshots/
+.trae-html-share-packages/
+.uploads/
+.words.js
+package.json
+package-lock.json
+.gh_token
+.git_askpass
