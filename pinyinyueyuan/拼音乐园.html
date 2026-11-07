@@ -729,6 +729,16 @@ const HANZI_LIST = HANZI.map(([h,py])=>{
 /* ---------------- 2.1 词语库（拼拼乐 / 对对碰 的词语上下文） ----------------
    只用一年级字表内的字组成的两字词语；找不到词语的字，退回单字展示。 */
 const WORDS=['去年','从来','飞机','江南','采花','游戏','没有','春天','反面','众多','升旗','工厂','卫生','事件','也是','刚才','对比','尾巴','谁的','雨伞','元旦','拼音','霜降','吹牛','落叶','飘雪','姓氏','行李','保护','害怕','石头','蓝色','扇子','翅膀','火星','白云','蜘蛛','食物','清晨','数数','拍手','水流','草地','电影','树木','迟到','透气','潮湿','消息','操场','锻炼','车站','吵闹','参观','觉得','羽毛','起床','拿出','朝霞','饱满','铅笔','忽然','邻居','招呼','北京','广东','非常','接着','门窗','钱包','期中','初一','回家','足球','下棋','西瓜','冰山','自动','可能','说明','正好','先前','用力','小刀','这么','弯路','长久','更加','进入','官方','语言','口令','原因','画册','相信','疑问','少见','熟人','大声','喜欢','打雷','节日','知道','想念','兴趣','闷热','文具','新书','平安','仔细','决心','交通','关注','结果','岁月','甘甜','治病','瓢虫','逃跑','野外','墙壁','转身','香皂','轻轻','跳高','不停','土块','秋风','乌黑','太阳','森林','柳条','玉米','肉片','菜汤','老虎','狗熊','蚂蚁','上网','蜻蜓','青蛙','鸟叫','公鸡','金鱼','鹿角','眼睛','肚皮','双腿','脚尖','耳朵','洗脸','爸爸','妈妈','哥哥','弟弟','姐姐','妹妹','爷爷','奶奶','叔叔','儿女','朋友','伙伴','你我','他们','十二','半个','第三','百分','千万','夜里','左右','房间','早晚','黄河','碧绿','温暖','严寒','酷暑','纯净','晴空','阴沉','直立','孤单','急忙','吃饭','喝茶','唱歌','写字','学习','作业','刷牙','追赶','检查','宝贝','背后','鞭炮','浮萍','已经','各种','做梦','送别','国情','散步','告诉','举办','看望','勇敢','端午','总之','彩虹','造句','教师','意义','跟踪','奇迹','掰开','扔掉','咕咚','主席','请坐','让座','讲课','搬迁','夏天','冬天','相遇','相互','阵雨','节目','据说','水珠','摇头','躺下','水晶','弯腰','伸手','木棍','北斗','多次','一些','叹气','一共','一定','物体','一遍','猴子','出现','车票','棉花','新娘','燕子','吓人','生命','打断','您好','盆子','领子','傻子','拨打','擦手','迷路','点头','热爱','不会','好处','月光','蚊虫','内外','红日','圆心','跳绳','每天','泉水','椅子','粮食','壮观','连接','水泡','牵手','初五','初七','年级','有名','王子','象棋','积木','尺子','小船','在家','把手','最好','爪子','音乐','夹子','水井','村子','车辆','一匹','一支','生死','运动','来往','入院','答对','找回','尘土','石桥','水池','闪电','乌鸦','夕阳','竹林','桃树','杨柳','荷花','莲叶','大豆','羊肉','白马','兔子','鸭子','展翅','眉毛','鼻子','嘴巴','脖子','手臂','舌头','毛巾','男女','家乡','她们','它们','子孙','古人','亲人','护士','医生','两年','四月','六月','八月','九月','几天','许多','一只','一张','一周','上班','方向','方法','下坡','昨晚','今晚','白纸','颜色','美好','温和','凉风','高低','长短','孤独','踢球','读书','字词','放学','洗澡','梳头','镜子','照片','浇水','洒水','挑水','织女','捉虫','拔草','摘花','蹦跳','书本','书桌','书架','带来','响声','哪里','场所','汽车','再见','这样','都是','事故','学校','田地','排球','篮球','思想','大胆','偏心','好像','微风','粽子','提问','裙子','铃声','个性','宝贵','专心','幼年','机器','首先','温柔','露水','丢人','鬼脸','扛起','捧花','胖子','干净','吐出','咬人','又是','就是','冰冻','战友','一颗','喊叫','鸟窝','安静','怎么','善心','抱起','乱跳','对准','分钟','忘我','出去','回去','从前','长江','开采','戏水','秋天','反对','大众','国旗','门卫','打伞','吹风','落水','降落'];
+/* 补充组词（2026-11-07）：保证每个字都有词语或短句展示，孩子拼字时始终有语境。
+   允许少量常用字超出一年级字表（如「萤火虫」的「火虫」均在表内、「箭」超表）；
+   组不出双字词的用三字短句（如「一棵树」「为什么呢」）。 */
+WORDS.push(
+  '禾苗','来了','吴老师','赵老师','他却没来','尝尝','应该','一棵树','捉迷藏','为什么呢','萤火虫','弓箭',
+  '来啦','拦住','甩尾巴','白鹅','歌曲','项链','手掌','波浪','何老师','远方','远近','好听','无人','惊吓','还在',
+  '锄头','当心','汗水','水滴','盘子','早餐','米粒','人人皆知','辛苦','时间','认识','瑶台','阳台','了解',
+  '过来','竹竿','斜坡','春晓','睡眠','新闻','啼叫','乘车','小舟','将要','欲望','河岸','踏步','水潭','深水',
+  '来不及','汪汪','汪伦','松树','儿童','吃药','因此','娃娃','撑伞','小艇','小偷','可惜','冠军','裁剪','走路','窗户'
+);
 const WORD_OF = {};
 WORDS.forEach(w=>{ [...w].forEach(c=>{ (WORD_OF[c]=WORD_OF[c]||[]).push(w); }); });
 function wordFor(ch){ const l=WORD_OF[ch]; return (l&&l.length)? l[Math.floor(Math.random()*l.length)] : null; }
@@ -1399,10 +1409,14 @@ function buildSession(){
 }
 
 /* ---------------- 6.5 星星积分 / 礼物兑换 / 参数 ---------------- */
+/* 星星按 0.1 为最小粒度存取；孩子端显示一律取整数（不出现小数），家长面板显示真实值 */
+const starStep = v => Math.round((Number(v)||0)*10)/10;
+const starExact = v => String(starStep(v));                 // 家长端显示（如 12.5）
+const starInt = v => String(Math.floor(starStep(v)+1e-9));  // 孩子端显示（只取整数）
 function addStars(delta, reason){
-  delta = Math.round(Number(delta)||0);
+  delta = starStep(delta);
   if(!delta) return;
-  state.stars = Math.max(0, (state.stars||0) + delta);
+  state.stars = Math.max(0, starStep((state.stars||0) + delta));
   state.starLog.push({ts:Date.now(), date:todayStr(), delta, reason:reason||''});
   if(state.starLog.length>3000) state.starLog = state.starLog.slice(-2000);
   save();
@@ -1410,13 +1424,14 @@ function addStars(delta, reason){
   renderStars();
 }
 function popStar(n){
-  const el=document.createElement('div'); el.className='star-pop'; el.textContent='+'+n+' ⭐';
+  const el=document.createElement('div'); el.className='star-pop';
+  el.textContent = Number.isInteger(n)? ('+'+n+' ⭐') : '⭐';   // 小数奖励不显示数字，避免孩子看到小数
   document.body.appendChild(el); setTimeout(()=>el.remove(), 1000);
 }
 function todaySessions(){ return (state.dayDone && state.dayDone[todayStr()]) || 0; }
 function bumpDayDone(){ state.dayDone=state.dayDone||{}; state.dayDone[todayStr()]=(state.dayDone[todayStr()]||0)+1; }
 function renderStars(){
-  const v=state.stars||0;
+  const v=starInt(state.stars||0);
   const a=document.getElementById('homeStars'); if(a) a.textContent=v;
   const b=document.getElementById('giftStars'); if(b) b.textContent=v;
   renderGoal();
@@ -1424,7 +1439,7 @@ function renderStars(){
 function renderGoal(){
   const el=document.getElementById('homeGoal'); if(!el) return;
   const g=state.settings.goal||{stars:0,tasks:1};
-  const earned=(state.starLog||[]).filter(x=>x.date===todayStr() && x.delta>0).reduce((a,b)=>a+b.delta,0);
+  const earned=starInt((state.starLog||[]).filter(x=>x.date===todayStr() && x.delta>0).reduce((a,b)=>a+b.delta,0));
   const tasks=todaySessions();
   el.innerHTML = `<span class="goal-pill ${earned>=g.stars?'done':''}">今日 ⭐ ${earned}/${g.stars}</span>`+
                  `<span class="goal-pill ${tasks>=g.tasks?'done':''}">任务 ${Math.min(tasks,g.tasks)}/${g.tasks} 组</span>`;
@@ -1492,14 +1507,14 @@ function parentAction(name){
 /* 孩子端的礼物页 */
 function renderGifts(){
   const bal=state.stars||0;
-  const gs=document.getElementById('giftStars'); if(gs) gs.textContent=bal;
+  const gs=document.getElementById('giftStars'); if(gs) gs.textContent=starInt(bal);
   const list=document.getElementById('giftList'); if(!list) return;
   if(!(state.gifts||[]).length){
     list.innerHTML = `<div class="kv">还没有礼物哦～ 请家长在「家长报告 → 星星与礼物」里添加吧 🎁</div>`;
   } else {
     list.innerHTML = `<div class="gift-grid">` + state.gifts.map(g=>{
       const pend = (state.redemptions||[]).some(r=>r.giftId===g.id && r.status==='pending');
-      const lack = Math.max(0, (g.cost||0)-bal);
+      const lack = Math.ceil(Math.max(0, (g.cost||0)-bal));
       const btn = pend
         ? `<button class="mini-btn" disabled>已许愿，等兑现 ⏳</button>`
         : `<button class="mini-btn pri" data-redeem="${escHtml(g.id)}">许愿 ✋</button>`;
@@ -1775,13 +1790,12 @@ function renderDrag(item, area, foot){
       if(!rec[kp.id]){ rec[kp.id]=1; recordAnswer(kp,'drag',false,CAT_NAME[binEl.dataset.cat],CAT_NAME[kp.cat]); }
       el.classList.remove('dragging','sel');
       el.classList.add('wrong-shake'); setTimeout(()=>el.classList.remove('wrong-shake'),520);
-      // 等卡片读音放完，再温和提示它应该回哪个家
+      // 按拼拼乐模式弹窗：说清它是什么、错放进了哪里、应该放回哪里
       const other = item.cards.map(c=>c.kp).find(k=>k.id!==kp.id && hintKey(k.text,kp.text) in HINT_SONG);
       const song = other? HINT_SONG[hintKey(other.text,kp.text)] : '';
-      setTimeout(()=>{
-        if(song) showHintCard(other, kp, song);
-        toast(kp.text+' 是'+CAT_NAME[kp.cat]+'哦，要送回「'+CAT_NAME[kp.cat]+'」框～', 2200);
-      }, 850);
+      const rightCat = CAT_NAME[kp.cat], putCat = CAT_NAME[binEl.dataset.cat];
+      const txt = '「'+kp.text+'」是'+rightCat+'，不是'+putCat+'哦～要送回「'+rightCat+'」的家里。'+(song? '　'+song : '');
+      wrongAttempt(item, '送错家啦', txt, '🏠');   // 卡片读音已在放卡时发过，弹窗直接出
     }
   }
   function onDown(e){
@@ -1869,12 +1883,17 @@ function renderListen(item, area, foot){
       speakKps(item.kp);
       setTimeout(()=>{ if(session.items[session.idx]===item) nextItem(); }, 1100);
     } else {
-      b.classList.add('no'); setTimeout(()=>b.classList.remove('no'),560);
+      b.classList.add('no');
       recordAnswer(item.kp,'listen',false,b.textContent,item.kp.text);
       const wrongKp=KP_BY_ID[b.dataset.id];
-      // 先把它点的这个读出来，再提示正确答案
-      if(wrongKp) speakKps(wrongKp);
-      setTimeout(()=>gentleHint(wrongKp, item.kp, item.kp), 800);
+      // 按拼拼乐模式弹窗：说清选的是什么、正确的读音是什么；有易混儿歌就一并附上
+      let txt = '你选的是「'+(wrongKp? wrongKp.text : b.textContent)+'」，正确的读音是「'+item.kp.text+'」。';
+      const song = wrongKp? HINT_SONG[hintKey(wrongKp.text,item.kp.text)] : '';
+      if(song) txt += '　'+song;
+      wrongAttempt(item, '听错啦', txt, '🎧', ()=>{
+        b.classList.remove('no');
+        setTimeout(play, 300);          // 留在本题重试：先把读音再放一遍
+      });
     }
   });
   item._cleanup = ()=>{};
@@ -1901,6 +1920,16 @@ function showHintDialog(title, text, cb, icon){
   if(ic) ic.textContent=icon||'💡';
   hintOkCb=cb||null;
   $('#maskHint').classList.add('show');
+}
+/* 四关统一的答错流程：第 1 次答错弹窗讲解后留在本题重试（保留已填内容）；
+   重试再错弹窗再讲一次，然后进入下一题，避免卡住。 */
+function wrongAttempt(item, title, text, icon, onRetry){
+  item.wrongTries = (item.wrongTries||0)+1;
+  const retry = item.wrongTries < 2;
+  showHintDialog(title, text, ()=>{
+    if(retry){ if(onRetry) onRetry(); }
+    else if(session && session.items[session.idx]===item) nextItem();
+  }, icon);
 }
 /* 精确判断这次错在「声母 / 韵母 / 声调」的哪一部分 */
 function buildWrongHint(item, exp){
@@ -1974,8 +2003,20 @@ function renderBuild(item, area, foot){
     if(b.id==='keyDel'){ item.base=item.base.slice(0,-1); }
     else if(b.id==='keyClr'){ item.base=''; }
     else if(item.base.length<6){
-      item.base += b.dataset.k;
-      speakKey(item.base, b.dataset.k);   // 敲一下就读这个拼音块（复韵母/双字母声母读整音）
+      const k=b.dataset.k;
+      const cur=decompose(item.base);                       // 当前已拼内容拆成 声母+韵母
+      const expD=decompose(item.expected.base);             // 正确答案拆成 声母+韵母
+      if(cur.fin && expD.fin.startsWith(cur.fin+k)){
+        // 接上这个键能更接近正确答案（如拼 uan/ang 时的 n、g，或拼 ua/ia 的第二个字母）：继续拼，不打断
+        item.base = (cur.init||'') + cur.fin + k;
+      } else if(KEY_IS_INIT.has(k)){
+        // 点声母：直接换掉原来的声母（原来没有就补上），韵母不动
+        item.base = k + cur.fin;
+      } else {
+        // 点韵母：换掉原来的韵母；若这个字本来就没有声母而孩子误拼了声母，一并去掉
+        item.base = (expD.init? (cur.init||'') : '') + k;
+      }
+      speakKey(item.base, k);   // 敲一下就读这个拼音块（复韵母/双字母声母读整音）
     }
     paint();
   });
@@ -2002,13 +2043,11 @@ function renderBuild(item, area, foot){
       speak(item.h.h);
       setTimeout(()=>{ if(session.items[session.idx]===item) nextItem(); }, 1200);
     } else {
-      disp.textContent = item.h.py + '  (' + item.h.h + ')';
-      disp.style.color = '#e0455f';
       const hint = buildWrongHint(item, exp);
       speak(item.h.h);                                  // 先读一遍正确读音，帮助孩子听清
-      showHintDialog(hint.title, hint.text, ()=>{       // 提示必须点「知道啦」才消失
-        if(session.items[session.idx]===item) nextItem();
-      }, hint.icon);
+      // 第 1 次答错：弹窗讲解后留在本题，已拼的字母和声调都保留，孩子照着提示改；
+      // 重试再错：再讲一次后进入下一题
+      wrongAttempt(item, hint.title, hint.text, hint.icon, ()=>{ item.done=false; paint(); });
     }
   };
   paint();
@@ -2054,12 +2093,15 @@ function renderMatch(item, area, foot){
       speak(item.h.h);
       setTimeout(()=>{ if(session.items[session.idx]===item) nextItem(); }, 950);
     } else {
-      b.classList.add('no'); setTimeout(()=>b.classList.remove('no'),560);
+      b.classList.add('no');
       recordAnswer(pickKpForHanzi(item.h),'match',false,hz,item.h.h);
+      // 按拼拼乐模式弹窗：说清选的是哪个字、正确答案和读音；有易混儿歌就一并附上
       const kp=pickKpForHanzi(item.h);
       const conf=confusables(kp).filter(k=>HINT_SONG[hintKey(k.text,kp.text)]);
-      gentleHint(conf[0]||null, kp, kp);
-      toast('它的读音是 '+item.h.py+' 哦～');
+      const song = conf[0]? HINT_SONG[hintKey(conf[0].text,kp.text)] : '';
+      const txt = '你选的是「'+hz+'」，正确的答案是「'+item.h.h+'」，读作 '+item.h.py+'。'+(song? '　'+song : '');
+      speak(item.h.h);   // 读一遍正确答案的字，帮孩子听清
+      wrongAttempt(item, '看错啦', txt, '🀄', ()=>{ b.classList.remove('no'); });
     }
   });
   item._cleanup = ()=>{};
@@ -2171,7 +2213,7 @@ function renderParent(){
 
   /* ⭐ 星星与礼物 */
   html += `<div class="panel"><div class="h-sec" style="margin-top:0">⭐ 星星与礼物</div>
-    <div class="star-bar"><span class="s-ico">⭐</span><span class="s-num">${bal}</span><span class="s-txt">当前星星</span></div>
+    <div class="star-bar"><span class="s-ico">⭐</span><span class="s-num">${starExact(bal)}</span><span class="s-txt">当前星星（支持 0.1 粒度，孩子端只显示整数）</span></div>
     <div class="set-row"><div class="set-l">手动加星 / 扣星<div class="set-d">给孩子奖励或扣除星星</div></div>
       <input type="number" id="starAdj" value="5" min="1" max="999">
       <button class="mini-btn green" data-action="star-add">加星 ＋</button>
@@ -2218,7 +2260,7 @@ function renderParent(){
 
   /* ⚙️ 练习参数 */
   html += `<div class="panel"><div class="h-sec" style="margin-top:0">⚙️ 练习参数</div>
-    <div class="kv">题量只作用于「每日闯关」；扫盲期与核验日会自动全覆盖，保证不漏知识点。时长上限对所有日子生效，0 表示不限。改完立即生效。<br><span style="opacity:.7">程序版本 2026-10-27</span></div>
+    <div class="kv">题量只作用于「每日闯关」；扫盲期与核验日会自动全覆盖，保证不漏知识点。时长上限对所有日子生效，0 表示不限。改完立即生效。<br><span style="opacity:.7">程序版本 2026-11-07（0.1 星粒度 · 四关答错弹窗 · 组词全覆盖 · 拼拼乐点键替换）</span></div>
     <div class="set-row"><div class="set-l">每日练习总时长<div class="set-d">单位：分钟（1–120）</div></div>
       <input type="number" data-set="minutes" value="${s.minutes}" min="1" max="120"></div>
     <div class="set-row"><div class="set-l">今日已用时长<div class="set-d">已累计 ${Math.round(usedSecondsToday()/60)} 分钟；页面切后台/锁屏时会自动暂停计时</div></div>
@@ -2249,8 +2291,8 @@ function renderParent(){
     <div class="set-sub">星星规则</div>
     <div class="set-row"><div class="set-l">答对每题得星</div>
       <input type="checkbox" data-set="star.perCorrectOn" ${s.star.perCorrectOn?'checked':''}></div>
-    <div class="set-row"><div class="set-l">每题奖励星数</div>
-      <input type="number" data-set="star.perCorrect" value="${s.star.perCorrect}" min="0" max="10"></div>
+    <div class="set-row"><div class="set-l">每题奖励星数<div class="set-d">最小 0.1（如 0.1=答对 10 题攒 1 星）；孩子端星星只显示整数，家长在这里可看到小数</div></div>
+      <input type="number" data-set="star.perCorrect" value="${s.star.perCorrect}" step="0.1" min="0" max="10"></div>
     <div class="set-row"><div class="set-l">完成今日任务奖励</div>
       <input type="checkbox" data-set="star.dailyOn" ${s.star.dailyOn?'checked':''}></div>
     <div class="set-row"><div class="set-l">完成奖励星数</div>
@@ -2318,7 +2360,7 @@ function exportCSV(){
   });
   // 参数设置 / 星星 / 礼物 / 兑换 / 打卡（跨设备也一并恢复）
   rows.push(['设置', JSON.stringify(state.settings), '', '', '', '', '', '', '', '']);
-  rows.push(['星星', String(state.stars||0), '', '', '', '', '', '', '', '']);
+  rows.push(['星星', starExact(state.stars||0), '', '', '', '', '', '', '', '']);
   (state.gifts||[]).forEach(g=> rows.push(['礼物', g.id, g.emoji||'', g.name||'', String(g.cost||0), '', '', '', '', '']));
   (state.redemptions||[]).forEach(r=> rows.push(['兑换', r.id, r.giftId||'', r.name||'', r.emoji||'',
     String(r.cost||0), r.date||'', r.status||'', '', '']));
