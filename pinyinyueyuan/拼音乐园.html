@@ -523,6 +523,10 @@ const FIN_KEYS  = YUNMU.map(x=>x[0]);
 const KEY_IS_INIT = new Set(INIT_KEYS);
 const MULTI_FIN = FIN_KEYS.filter(k=>k.length>1);
 const MULTI_INIT = INIT_KEYS.filter(k=>k.length>1);
+/* 介母：i / u / ü 可放在声母和韵母中间（如 h-u-ang → huang），
+   键盘上单独成「介母」区，方便孩子理解；它们同时也是单韵母，逻辑上按韵母键处理 */
+const MEDIAL_KEYS = FIN_KEYS.filter(k=>k.length===1 && 'iuü'.includes(k));
+const FIN_MAIN_KEYS = FIN_KEYS.filter(k=>!MEDIAL_KEYS.includes(k));
 
 /* ---------------- 易混组合 ---------------- */
 const CONFUSE = (function(){
@@ -1794,7 +1798,7 @@ function renderDrag(item, area, foot){
       const other = item.cards.map(c=>c.kp).find(k=>k.id!==kp.id && hintKey(k.text,kp.text) in HINT_SONG);
       const song = other? HINT_SONG[hintKey(other.text,kp.text)] : '';
       const rightCat = CAT_NAME[kp.cat], putCat = CAT_NAME[binEl.dataset.cat];
-      const txt = '「'+kp.text+'」是'+rightCat+'，不是'+putCat+'哦～要送回「'+rightCat+'」的家里。'+(song? '　'+song : '');
+      const txt = ruby('它是')+hl(rightCat)+ruby('，不是')+hl(putCat)+ruby('，送回')+hl(rightCat)+ruby('的家。')+(song? '　'+ruby(song) : '');
       wrongAttempt(item, '送错家啦', txt, '🏠');   // 卡片读音已在放卡时发过，弹窗直接出
     }
   }
@@ -1887,9 +1891,9 @@ function renderListen(item, area, foot){
       recordAnswer(item.kp,'listen',false,b.textContent,item.kp.text);
       const wrongKp=KP_BY_ID[b.dataset.id];
       // 按拼拼乐模式弹窗：说清选的是什么、正确的读音是什么；有易混儿歌就一并附上
-      let txt = '你选的是「'+(wrongKp? wrongKp.text : b.textContent)+'」，正确的读音是「'+item.kp.text+'」。';
+      let txt = ruby('你选的是')+hl(wrongKp? wrongKp.text : b.textContent)+ruby('，正确读音是')+hl(item.kp.text)+ruby('。');
       const song = wrongKp? HINT_SONG[hintKey(wrongKp.text,item.kp.text)] : '';
-      if(song) txt += '　'+song;
+      if(song) txt += '　'+ruby(song);
       wrongAttempt(item, '听错啦', txt, '🎧', ()=>{
         b.classList.remove('no');
         setTimeout(play, 300);          // 留在本题重试：先把读音再放一遍
@@ -1902,25 +1906,31 @@ function renderListen(item, area, foot){
 /* --- 3) 汉字拼拼乐：声母键 + 韵母键，拼带调音节 ---
    敲键时读“能识别出的拼音块”：若 base 结尾是复韵母（ui/iu/ao…）或双字母声母（zh/ch/sh），
    就整体读这个块，否则读刚敲的那个键。这样即使用 u、i 分两下敲，也会读成「ui」，而不是「乌、衣」。 */
-function speakKey(base, key){
+function speakKey(base, key, asFinal){
+  // asFinal=false：刚敲的是声母键（含 zh/ch/sh 整键）→ 无论 base 结尾是什么都读声母。
+  // 否则替换声母时（如 zhang 改 chang），base 结尾还是 ang，会被误读成韵母。
+  if(!asFinal && KEY_IS_INIT.has(key)){ const ki=KP_BY_ID['sm:'+key]; if(ki) return speakKps(ki); }
+  // 读韵母：若 base 结尾拼出了复韵母（u→ui、a→ai…），整体读这个块
   for(const u of MULTI_FIN){ if(base.endsWith(u)){ const k=KP_BY_ID['ym:'+u]; if(k) return speakKps(k); } }
-  for(const u of MULTI_INIT){ if(base.endsWith(u)){ const k=KP_BY_ID['sm:'+u]; if(k) return speakKps(k); } }
-  const kp=KP_BY_ID[(KEY_IS_INIT.has(key)?'sm:':'ym:')+key];
+  const kp=KP_BY_ID['ym:'+key];
   if(kp) speakKps(kp);
 }
 const TONE_NAME=['','一声','二声','三声','四声'];
 /* j q x y 遇 ü 写作 u，比较声母时先归一，避免把「ü 写成 u」误判成声母错 */
 const initFold = (ini, fin) => (fin && fin[0]==='ü' && 'jqxy'.includes(ini)) ? ini+'u' : ini;
-/* 答错提示弹窗：必须点「知道啦」才消失 */
+/* 答错提示弹窗：必须点「知道啦」才消失。
+   text 参数是调用方用 ruby()/hl() 组装好的 HTML（关键信息用 hl() 标红） */
 let hintOkCb=null;
-function showHintDialog(title, text, cb, icon){
+function showHintDialog(title, textHtml, cb, icon){
   const t=$('#hintTitle'), p=$('#hintText'), ic=$('#hintIcon');
   if(t) t.innerHTML=ruby(title);
-  if(p) p.innerHTML=ruby(text);
+  if(p) p.innerHTML=textHtml;
   if(ic) ic.textContent=icon||'💡';
   hintOkCb=cb||null;
   $('#maskHint').classList.add('show');
 }
+/* 提示文字里的关键字标红加粗，帮孩子一眼看到错在哪、正确的是什么 */
+const hl = s => '<b style="color:#e0344a">'+ruby(s)+'</b>';
 /* 四关统一的答错流程：第 1 次答错弹窗讲解后留在本题重试（保留已填内容）；
    重试再错弹窗再讲一次，然后进入下一题，避免卡住。 */
 function wrongAttempt(item, title, text, icon, onRetry){
@@ -1931,7 +1941,7 @@ function wrongAttempt(item, title, text, icon, onRetry){
     else if(session && session.items[session.idx]===item) nextItem();
   }, icon);
 }
-/* 精确判断这次错在「声母 / 韵母 / 声调」的哪一部分 */
+/* 精确判断这次错在「声母 / 韵母 / 声调」的哪一部分；关键字用 hl() 标红 */
 function buildWrongHint(item, exp){
   const ub=canonBase(item.base), eb=canonBase(exp.base);
   const same = ub===eb;                       // 字母完全一样，那就只可能是声调问题
@@ -1939,30 +1949,31 @@ function buildWrongHint(item, exp){
   const initWrong = !same && initFold(du.init,du.fin)!==initFold(de.init,de.fin);
   const finWrong  = !same && du.fin!==de.fin;
   const toneWrong = !!exp.tone && item.tone!==exp.tone;
+  const ans = '<span style="opacity:.75">　'+ruby(item.h.h+' = '+item.h.py)+'</span>';
   if(!initWrong && !finWrong && toneWrong){
     const uT = item.tone? TONE_NAME[item.tone] : '没选声调';
     return { icon:'🎵', title:'声调没选对哦',
-      text:'「'+item.h.h+'」读作 '+item.h.py+'，是'+TONE_NAME[exp.tone]+'；你选的是'+uT+'。' };
+      text: ruby('「'+item.h.h+'」是')+hl(TONE_NAME[exp.tone])+ruby('，不是')+hl(uT)+ruby('。')+ans };
   }
   if(initWrong && finWrong){
-    const it = de.init? '「'+de.init+'」' : '（没有声母）';
-    return { icon:'🔤', title:'声母和韵母都要改一改哦',
-      text:'这个字的声母是'+it+'，韵母是「'+de.fin+'」；你拼的是「'+ub+'」。　'+item.h.h+' = '+item.h.py };
+    const it = de.init? de.init : '（没有声母）';
+    return { icon:'🔤', title:'声母韵母都要改哦',
+      text: ruby('声母是')+hl(it)+ruby('，韵母是')+hl(de.fin)+ruby('；你拼的是')+hl(ub)+ruby('。')+ans };
   }
   if(initWrong){
     let t;
-    if(!de.init) t='这个字开头没有声母，不用拼「'+du.init+'」哦。';
-    else if(!du.init) t='这个字的声母是「'+de.init+'」，开头别忘了拼它哦。';
-    else t='这个字的声母是「'+de.init+'」，你开头拼的是「'+du.init+'」。';
-    return { icon:'🔤', title:'声母要改一改哦', text:t+'　'+item.h.h+' = '+item.h.py };
+    if(!de.init) t = ruby('这个字')+hl('没有声母')+ruby('，去掉')+hl(du.init)+ruby('哦。');
+    else if(!du.init) t = ruby('声母是')+hl(de.init)+ruby('，别忘了拼哦。');
+    else t = ruby('声母是')+hl(de.init)+ruby('，不是')+hl(du.init)+ruby('。');
+    return { icon:'🔤', title:'声母要改一改哦', text:t+ans };
   }
   if(finWrong){
     const t = du.fin
-      ? '这个字的韵母是「'+de.fin+'」，你拼的是「'+du.fin+'」。'
-      : '后面还差韵母「'+de.fin+'」哦。';
-    return { icon:'🔤', title:'韵母要改一改哦', text:t+'　'+item.h.h+' = '+item.h.py };
+      ? ruby('韵母是')+hl(de.fin)+ruby('，不是')+hl(du.fin)+ruby('。')
+      : ruby('还差韵母')+hl(de.fin)+ruby('哦。');
+    return { icon:'🔤', title:'韵母要改一改哦', text:t+ans };
   }
-  return { icon:'💡', title:'再仔细看看哦', text:item.h.h+' = '+item.h.py };
+  return { icon:'💡', title:'再仔细看看哦', text:ans };
 }
 function renderBuild(item, area, foot){
   const chunk=(arr,n)=>{ const o=[]; for(let i=0;i<arr.length;i+=n) o.push(arr.slice(i,i+n)); return o; };
@@ -1982,8 +1993,10 @@ function renderBuild(item, area, foot){
     <div class="kbd" id="kbd">
       <div class="kbd-sec">声母</div>
       ${chunk(INIT_KEYS,8).map(kbRow).join('')}
+      <div class="kbd-sec">介母</div>
+      <div class="kbd-row">${MEDIAL_KEYS.map(ch=>`<button class="key" data-k="${ch}">${ch}</button>`).join('')}<span style="font-size:12px;opacity:.65;align-self:center;margin-left:6px">${ruby('介母放中间，如 h-u-ang → huang')}</span></div>
       <div class="kbd-sec">韵母</div>
-      ${chunk(FIN_KEYS,6).map(kbRow).join('')}
+      ${chunk(FIN_MAIN_KEYS,6).map(kbRow).join('')}
       <div class="kbd-row" style="margin-top:5px">
         <button class="key wide del" id="keyDel">⌫ ${ruby('删除')}</button>
         <button class="key wide" id="keyClr">${ruby('清空')}</button>
@@ -2006,17 +2019,24 @@ function renderBuild(item, area, foot){
       const k=b.dataset.k;
       const cur=decompose(item.base);                       // 当前已拼内容拆成 声母+韵母
       const expD=decompose(item.expected.base);             // 正确答案拆成 声母+韵母
-      if(cur.fin && expD.fin.startsWith(cur.fin+k)){
-        // 接上这个键能更接近正确答案（如拼 uan/ang 时的 n、g，或拼 ua/ia 的第二个字母）：继续拼，不打断
+      // j/q/x/y 后面的 ü 按书写规范写作 u（ju qu xu yu），比较时把两侧 ü 归一成 u，
+      // 这样拼 jue 时按 ü 键再按 e 也能接上（jü→jüe ≙ jue）
+      const fold = f => ('jqxy'.includes(cur.init)||'jqxy'.includes(de.init)) ? f.replace(/ü/g,'u') : f;
+      if(cur.fin && fold(expD.fin).startsWith(fold(cur.fin+k))){
+        // 续拼优先：接上这个键能更接近正确答案就不打断——
+        // 包括拼 uan/uang 时的 n、g，也包括介母组合（h + u 接 ang → huang、x + i 接 ong → xiong）
         item.base = (cur.init||'') + cur.fin + k;
+        speakKey(item.base, k, true);          // 续拼读刚拼完的韵母块（如 uang 整体读），不读声母
       } else if(KEY_IS_INIT.has(k)){
-        // 点声母：直接换掉原来的声母（原来没有就补上），韵母不动
+        // 点声母：直接换掉原来的声母（原来没有就补上），韵母（含已按的介母）不动
         item.base = k + cur.fin;
+        speakKey(item.base, k);   // 点的是声母键 → 读声母（修复替换声母后误读韵母的问题）
       } else {
-        // 点韵母：换掉原来的韵母；若这个字本来就没有声母而孩子误拼了声母，一并去掉
+        // 点韵母/介母键：换掉原来的韵母。声母后面第一次按 i/u/ü 就是接介母（h + u → hu）；
+        // 若这个字本来就没有声母而孩子误拼了声母，一并去掉
         item.base = (expD.init? (cur.init||'') : '') + k;
+        speakKey(item.base, k);   // 敲一下就读这个拼音块（复韵母整读）
       }
-      speakKey(item.base, k);   // 敲一下就读这个拼音块（复韵母/双字母声母读整音）
     }
     paint();
   });
@@ -2099,9 +2119,9 @@ function renderMatch(item, area, foot){
       const kp=pickKpForHanzi(item.h);
       const conf=confusables(kp).filter(k=>HINT_SONG[hintKey(k.text,kp.text)]);
       const song = conf[0]? HINT_SONG[hintKey(conf[0].text,kp.text)] : '';
-      const txt = '你选的是「'+hz+'」，正确的答案是「'+item.h.h+'」，读作 '+item.h.py+'。'+(song? '　'+song : '');
+      const txt = ruby('你选的是')+hl(hz)+ruby('，正确的是')+hl(item.h.h)+ruby('，读 ')+hl(item.h.py)+ruby('。')+(song? '　'+ruby(song) : '');
       speak(item.h.h);   // 读一遍正确答案的字，帮孩子听清
-      wrongAttempt(item, '看错啦', txt, '🀄', ()=>{ b.classList.remove('no'); });
+      wrongAttempt(item, '看错啦', txt, hz, ()=>{ b.classList.remove('no'); });   // 弹窗中间直接显示点错的字
     }
   });
   item._cleanup = ()=>{};
