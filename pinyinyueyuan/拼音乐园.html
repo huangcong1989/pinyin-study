@@ -131,26 +131,26 @@ body{
 /* 拼拼乐 */
 .build-top{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:2px}
 .hz-big{font-size:58px;font-weight:900;line-height:1}
-.word-big{font-size:54px;font-weight:900;line-height:1.05;letter-spacing:4px}
+.word-big{font-size:46px;font-weight:900;line-height:1.05;letter-spacing:4px}
 .word-big .tgt{color:#e0455f}
-.word-big .pyh{color:#2f8ad4;font-size:44px;letter-spacing:1px}
+.word-big .pyh{color:#2f8ad4;font-size:40px;letter-spacing:1px}
 .hz-emoji{font-size:32px}
-.mini-speak{border:none;width:48px;height:48px;border-radius:50%;font-size:22px;background:#eaf4ff;font-family:inherit}
-.build-display{margin-top:10px;min-height:58px;border-radius:16px;background:#f7fbff;border:3px dashed #cfe3f5;
-  display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:900;letter-spacing:2px;color:var(--blue-d)}
-.build-display .ph{font-size:14px;color:#a9bdd0;font-weight:600;letter-spacing:0}
-.tone-row{display:flex;gap:8px;justify-content:center;margin-top:10px}
-.tone-btn{flex:1;max-width:86px;border:3px solid #dbe9f6;background:#fff;border-radius:14px;padding:5px 0;
-  font-size:22px;font-weight:900;color:var(--ink);font-family:inherit;line-height:1.1}
+.mini-speak{border:none;width:42px;height:42px;border-radius:50%;font-size:20px;background:#eaf4ff;font-family:inherit}
+.build-display{margin-top:6px;min-height:46px;border-radius:14px;background:#f7fbff;border:3px dashed #cfe3f5;
+  display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900;letter-spacing:2px;color:var(--blue-d)}
+.build-display .ph{font-size:13px;color:#a9bdd0;font-weight:600;letter-spacing:0}
+.tone-row{display:flex;gap:6px;justify-content:center;margin-top:6px}
+.tone-btn{flex:1;max-width:80px;border:2px solid #dbe9f6;background:#fff;border-radius:11px;padding:3px 0;
+  font-size:19px;font-weight:900;color:var(--ink);font-family:inherit;line-height:1.1}
 .tone-btn small{display:block;font-size:10px;color:var(--ink-2);font-weight:700;margin-top:1px}
 .tone-btn.on{border-color:var(--orange);background:#fff6ef;color:#d9762c}
-.kbd{margin-top:10px}
-.kbd-sec{font-size:11px;font-weight:800;color:var(--ink-2);letter-spacing:1px;margin:2px 0 4px 2px}
-.kbd-row{display:flex;gap:5px;justify-content:center;margin-bottom:5px}
-.key{border:2px solid #dbe9f6;background:#fff;border-radius:11px;width:100%;max-width:58px;height:40px;
-  font-size:19px;font-weight:800;color:var(--ink);font-family:inherit;box-shadow:0 3px 0 #e2edf7}
-.key:active{transform:translateY(2px);box-shadow:0 1px 0 #e2edf7;background:#eef6ff}
-.key.wide{max-width:78px;font-size:16px}
+.kbd{margin-top:6px}
+.kbd-sec{font-size:10px;font-weight:800;color:var(--ink-2);letter-spacing:1px;margin:1px 0 2px 2px}
+.kbd-row{display:flex;gap:3px;justify-content:center;margin-bottom:3px}
+.key{border:2px solid #dbe9f6;background:#fff;border-radius:9px;width:100%;max-width:52px;height:33px;
+  font-size:16px;font-weight:800;color:var(--ink);font-family:inherit;box-shadow:0 2px 0 #e2edf7;padding:0}
+.key:active{transform:translateY(1px);box-shadow:0 1px 0 #e2edf7;background:#eef6ff}
+.key.wide{max-width:78px;font-size:15px}
 .key.del{color:#e0455f;background:#fff4f6}
 
 /* ---------- 通用底部操作 ---------- */
@@ -1994,9 +1994,9 @@ function renderBuild(item, area, foot){
       <div class="kbd-sec">声母</div>
       ${chunk(INIT_KEYS,8).map(kbRow).join('')}
       <div class="kbd-sec">介母</div>
-      <div class="kbd-row">${MEDIAL_KEYS.map(ch=>`<button class="key" data-k="${ch}">${ch}</button>`).join('')}<span style="font-size:12px;opacity:.65;align-self:center;margin-left:6px">${ruby('介母放中间，如 h-u-ang → huang')}</span></div>
+      <div class="kbd-row">${MEDIAL_KEYS.map(ch=>`<button class="key" data-k="${ch}">${ch}</button>`).join('')}<span style="font-size:10px;opacity:.6;align-self:center;margin-left:5px">${ruby('放中间，如 h-u-ang→huang')}</span></div>
       <div class="kbd-sec">韵母</div>
-      ${chunk(FIN_MAIN_KEYS,6).map(kbRow).join('')}
+      ${chunk(FIN_MAIN_KEYS,7).map(kbRow).join('')}
       <div class="kbd-row" style="margin-top:5px">
         <button class="key wide del" id="keyDel">⌫ ${ruby('删除')}</button>
         <button class="key wide" id="keyClr">${ruby('清空')}</button>
@@ -2021,7 +2021,7 @@ function renderBuild(item, area, foot){
       const expD=decompose(item.expected.base);             // 正确答案拆成 声母+韵母
       // j/q/x/y 后面的 ü 按书写规范写作 u（ju qu xu yu），比较时把两侧 ü 归一成 u，
       // 这样拼 jue 时按 ü 键再按 e 也能接上（jü→jüe ≙ jue）
-      const fold = f => ('jqxy'.includes(cur.init)||'jqxy'.includes(de.init)) ? f.replace(/ü/g,'u') : f;
+      const fold = f => ('jqxy'.includes(cur.init)||'jqxy'.includes(expD.init)) ? f.replace(/ü/g,'u') : f;
       if(cur.fin && fold(expD.fin).startsWith(fold(cur.fin+k))){
         // 续拼优先：接上这个键能更接近正确答案就不打断——
         // 包括拼 uan/uang 时的 n、g，也包括介母组合（h + u 接 ang → huang、x + i 接 ong → xiong）
@@ -2121,7 +2121,7 @@ function renderMatch(item, area, foot){
       const song = conf[0]? HINT_SONG[hintKey(conf[0].text,kp.text)] : '';
       const txt = ruby('你选的是')+hl(hz)+ruby('，正确的是')+hl(item.h.h)+ruby('，读 ')+hl(item.h.py)+ruby('。')+(song? '　'+ruby(song) : '');
       speak(item.h.h);   // 读一遍正确答案的字，帮孩子听清
-      wrongAttempt(item, '看错啦', txt, hz, ()=>{ b.classList.remove('no'); });   // 弹窗中间直接显示点错的字
+      wrongAttempt(item, '看错啦', txt, item.h.h, ()=>{ b.classList.remove('no'); });   // 弹窗中间直接显示正确的字
     }
   });
   item._cleanup = ()=>{};
@@ -2280,7 +2280,7 @@ function renderParent(){
 
   /* ⚙️ 练习参数 */
   html += `<div class="panel"><div class="h-sec" style="margin-top:0">⚙️ 练习参数</div>
-    <div class="kv">题量只作用于「每日闯关」；扫盲期与核验日会自动全覆盖，保证不漏知识点。时长上限对所有日子生效，0 表示不限。改完立即生效。<br><span style="opacity:.7">程序版本 2026-11-07（0.1 星粒度 · 四关答错弹窗 · 组词全覆盖 · 拼拼乐点键替换）</span></div>
+    <div class="kv">题量只作用于「每日闯关」；扫盲期与核验日会自动全覆盖，保证不漏知识点。时长上限对所有日子生效，0 表示不限。改完立即生效。<br><span style="opacity:.7">程序版本 2026-11-07b（0.1 星粒度 · 答错弹窗重试 · 组词全覆盖 · 点键替换 · 介母区 · 一屏键盘）</span></div>
     <div class="set-row"><div class="set-l">每日练习总时长<div class="set-d">单位：分钟（1–120）</div></div>
       <input type="number" data-set="minutes" value="${s.minutes}" min="1" max="120"></div>
     <div class="set-row"><div class="set-l">今日已用时长<div class="set-d">已累计 ${Math.round(usedSecondsToday()/60)} 分钟；页面切后台/锁屏时会自动暂停计时</div></div>
