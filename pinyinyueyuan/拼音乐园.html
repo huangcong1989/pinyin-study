@@ -9,6 +9,27 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <title>拼音乐园</title>
+<script>
+/* 全局错误可视化：任何 JS 错误立即在页面顶部显示红条（不再静默失败） */
+window.addEventListener('error', function(e){
+  var b=document.getElementById('errBanner');
+  if(!b){ b=document.createElement('div'); b.id='errBanner';
+    b.style.cssText='position:fixed;top:0;left:0;right:0;z-index:99999;background:#c62828;color:#fff;font:12px/1.5 monospace;padding:6px 10px;white-space:pre-wrap;word-break:break-all';
+    (document.body||document.documentElement).appendChild(b); }
+  b.textContent='⚠ 页面脚本错误: '+e.message+' @ '+(e.filename||'').split('/').pop()+':'+e.lineno;
+});
+window.addEventListener('unhandledrejection', function(e){
+  var b=document.getElementById('errBanner');
+  if(b) b.textContent='⚠ 异步错误: '+(e.reason&&e.reason.message||e.reason);
+});
+/* 常驻版本角标：任何界面都能看到，用于确认加载的是哪个版本 */
+document.addEventListener('DOMContentLoaded', function(){
+  if(document.getElementById('verChip')) return;
+  var c=document.createElement('div'); c.id='verChip'; c.textContent='V07d';
+  c.style.cssText='position:fixed;bottom:4px;right:6px;z-index:9998;font:900 11px monospace;color:#2f8ad4;opacity:.6;pointer-events:none';
+  document.body.appendChild(c);
+});
+</script>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
