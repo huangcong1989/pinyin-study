@@ -1994,7 +1994,7 @@ function renderBuild(item, area, foot){
       <div class="kbd-sec">声母</div>
       ${chunk(INIT_KEYS,8).map(kbRow).join('')}
       <div class="kbd-sec">介母</div>
-      <div class="kbd-row">${MEDIAL_KEYS.map(ch=>`<button class="key" data-k="${ch}">${ch}</button>`).join('')}<span style="font-size:10px;opacity:.6;align-self:center;margin-left:5px">${ruby('放中间，如 h-u-ang→huang')}</span></div>
+      <div class="kbd-row">${MEDIAL_KEYS.map(ch=>`<button class="key" data-k="${ch}">${ch}</button>`).join('')}<span style="font-size:10px;opacity:.6;align-self:center;margin-left:5px">${ruby('放中间，如 h-u-ang→huang')}　<b style="color:#2f8ad4">V07d</b></span></div>
       <div class="kbd-sec">韵母</div>
       ${chunk(FIN_MAIN_KEYS,7).map(kbRow).join('')}
       <div class="kbd-row" style="margin-top:5px">
@@ -2285,7 +2285,7 @@ function renderParent(){
 
   /* ⚙️ 练习参数 */
   html += `<div class="panel"><div class="h-sec" style="margin-top:0">⚙️ 练习参数</div>
-    <div class="kv">题量只作用于「每日闯关」；扫盲期与核验日会自动全覆盖，保证不漏知识点。时长上限对所有日子生效，0 表示不限。改完立即生效。<br><span style="opacity:.7">程序版本 2026-11-07c（0.1 星粒度 · 答错弹窗重试 · 组词全覆盖 · 点键替换 · 介母区/插入 · 一屏键盘）</span></div>
+    <div class="kv">题量只作用于「每日闯关」；扫盲期与核验日会自动全覆盖，保证不漏知识点。时长上限对所有日子生效，0 表示不限。改完立即生效。<br><span style="opacity:.7">程序版本 2026-11-07d（0.1 星粒度 · 答错弹窗重试 · 组词全覆盖 · 点键替换 · 介母区/插入 · 一屏键盘）</span></div>
     <div class="set-row"><div class="set-l">每日练习总时长<div class="set-d">单位：分钟（1–120）</div></div>
       <input type="number" data-set="minutes" value="${s.minutes}" min="1" max="120"></div>
     <div class="set-row"><div class="set-l">今日已用时长<div class="set-d">已累计 ${Math.round(usedSecondsToday()/60)} 分钟；页面切后台/锁屏时会自动暂停计时</div></div>
