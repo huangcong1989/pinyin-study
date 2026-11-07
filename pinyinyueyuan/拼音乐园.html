@@ -2027,6 +2027,11 @@ function renderBuild(item, area, foot){
         // 包括拼 uan/uang 时的 n、g，也包括介母组合（h + u 接 ang → huang、x + i 接 ong → xiong）
         item.base = (cur.init||'') + cur.fin + k;
         speakKey(item.base, k, true);          // 续拼读刚拼完的韵母块（如 uang 整体读），不读声母
+      } else if(cur.fin && MEDIAL_KEYS.includes(k) && expD.fin.startsWith(k) && !expD.fin.startsWith(cur.fin)){
+        // 介母插入：已拼出韵母但目标韵母以 i/u/ü 开头（如先拼 h+ang 得 hang，再补按 u），
+        // 把介母插到声母后面变成 huang，而不是把已拼的韵母冲掉
+        item.base = (cur.init||'') + k + cur.fin;
+        speakKey(item.base, k);
       } else if(KEY_IS_INIT.has(k)){
         // 点声母：直接换掉原来的声母（原来没有就补上），韵母（含已按的介母）不动
         item.base = k + cur.fin;
@@ -2280,7 +2285,7 @@ function renderParent(){
 
   /* ⚙️ 练习参数 */
   html += `<div class="panel"><div class="h-sec" style="margin-top:0">⚙️ 练习参数</div>
-    <div class="kv">题量只作用于「每日闯关」；扫盲期与核验日会自动全覆盖，保证不漏知识点。时长上限对所有日子生效，0 表示不限。改完立即生效。<br><span style="opacity:.7">程序版本 2026-11-07b（0.1 星粒度 · 答错弹窗重试 · 组词全覆盖 · 点键替换 · 介母区 · 一屏键盘）</span></div>
+    <div class="kv">题量只作用于「每日闯关」；扫盲期与核验日会自动全覆盖，保证不漏知识点。时长上限对所有日子生效，0 表示不限。改完立即生效。<br><span style="opacity:.7">程序版本 2026-11-07c（0.1 星粒度 · 答错弹窗重试 · 组词全覆盖 · 点键替换 · 介母区/插入 · 一屏键盘）</span></div>
     <div class="set-row"><div class="set-l">每日练习总时长<div class="set-d">单位：分钟（1–120）</div></div>
       <input type="number" data-set="minutes" value="${s.minutes}" min="1" max="120"></div>
     <div class="set-row"><div class="set-l">今日已用时长<div class="set-d">已累计 ${Math.round(usedSecondsToday()/60)} 分钟；页面切后台/锁屏时会自动暂停计时</div></div>
