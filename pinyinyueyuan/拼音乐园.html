@@ -8,7 +8,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>拼音乐园 V07d</title>
+<title>拼音乐园 V07e</title>
 <script>
 /* 全局错误可视化：任何 JS 错误立即在页面顶部显示红条（不再静默失败） */
 window.addEventListener('error', function(e){
@@ -25,7 +25,7 @@ window.addEventListener('unhandledrejection', function(e){
 /* 常驻版本角标：任何界面都能看到，用于确认加载的是哪个版本 */
 document.addEventListener('DOMContentLoaded', function(){
   if(document.getElementById('verChip')) return;
-  var c=document.createElement('div'); c.id='verChip'; c.textContent='V07d';
+  var c=document.createElement('div'); c.id='verChip'; c.textContent='V07e';
   c.style.cssText='position:fixed;bottom:4px;right:6px;z-index:9998;font:900 11px monospace;color:#2f8ad4;opacity:.6;pointer-events:none';
   document.body.appendChild(c);
 });
@@ -157,21 +157,22 @@ body{
 .word-big .pyh{color:#2f8ad4;font-size:40px;letter-spacing:1px}
 .hz-emoji{font-size:32px}
 .mini-speak{border:none;width:42px;height:42px;border-radius:50%;font-size:20px;background:#eaf4ff;font-family:inherit}
-.build-display{margin-top:6px;min-height:46px;border-radius:14px;background:#f7fbff;border:3px dashed #cfe3f5;
-  display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900;letter-spacing:2px;color:var(--blue-d)}
+.build-display{margin-top:8px;min-height:56px;border-radius:14px;background:#f7fbff;border:3px dashed #cfe3f5;
+  display:flex;align-items:center;justify-content:center;font-size:34px;font-weight:900;letter-spacing:2px;color:var(--blue-d)}
 .build-display .ph{font-size:13px;color:#a9bdd0;font-weight:600;letter-spacing:0}
-.tone-row{display:flex;gap:6px;justify-content:center;margin-top:6px}
-.tone-btn{flex:1;max-width:80px;border:2px solid #dbe9f6;background:#fff;border-radius:11px;padding:3px 0;
-  font-size:19px;font-weight:900;color:var(--ink);font-family:inherit;line-height:1.1}
+.key-log{min-height:13px;text-align:center;font-size:11px;color:#6b7f95;font-weight:700;margin-top:2px;letter-spacing:1px}
+.tone-row{display:flex;gap:6px;justify-content:center;margin-top:8px}
+.tone-btn{flex:1;max-width:84px;border:2px solid #dbe9f6;background:#fff;border-radius:11px;padding:6px 0;
+  font-size:22px;font-weight:900;color:var(--ink);font-family:inherit;line-height:1.1}
 .tone-btn small{display:block;font-size:10px;color:var(--ink-2);font-weight:700;margin-top:1px}
 .tone-btn.on{border-color:var(--orange);background:#fff6ef;color:#d9762c}
 .kbd{margin-top:6px}
-.kbd-sec{font-size:10px;font-weight:800;color:var(--ink-2);letter-spacing:1px;margin:1px 0 2px 2px}
-.kbd-row{display:flex;gap:3px;justify-content:center;margin-bottom:3px}
-.key{border:2px solid #dbe9f6;background:#fff;border-radius:9px;width:100%;max-width:52px;height:33px;
-  font-size:16px;font-weight:800;color:var(--ink);font-family:inherit;box-shadow:0 2px 0 #e2edf7;padding:0}
+.kbd-sec{font-size:11px;font-weight:800;color:var(--ink-2);letter-spacing:1px;margin:2px 0 2px 2px}
+.kbd-row{display:flex;gap:4px;justify-content:center;margin-bottom:4px}
+.key{border:2px solid #dbe9f6;background:#fff;border-radius:10px;width:100%;max-width:64px;height:44px;
+  font-size:20px;font-weight:800;color:var(--ink);font-family:inherit;box-shadow:0 3px 0 #e2edf7;padding:0}
 .key:active{transform:translateY(1px);box-shadow:0 1px 0 #e2edf7;background:#eef6ff}
-.key.wide{max-width:78px;font-size:15px}
+.key.wide{max-width:96px;font-size:18px}
 .key.del{color:#e0455f;background:#fff4f6}
 
 /* ---------- 通用底部操作 ---------- */
@@ -548,6 +549,12 @@ const MULTI_INIT = INIT_KEYS.filter(k=>k.length>1);
    键盘上单独成「介母」区，方便孩子理解；它们同时也是单韵母，逻辑上按韵母键处理 */
 const MEDIAL_KEYS = FIN_KEYS.filter(k=>k.length===1 && 'iuü'.includes(k));
 const FIN_MAIN_KEYS = FIN_KEYS.filter(k=>!MEDIAL_KEYS.includes(k));
+/* 全部普通话韵母（含键盘上没有、需要逐字母拼出来的复合韵母），用于「纯拼音组合」判断：
+   只要接上这个字母能构成/延伸出合法韵母就续拼——与题目答案无关，孩子想拼什么就拼什么。
+   比如 h-u-a-n-g → huang、i-o-n-g → iong，不管当前题目的字读什么都成立 */
+const FULL_FINALS=['a','o','e','i','u','ü','er','ai','ei','ui','ao','ou','iu','ie','üe','ue','an','en','in','un','ün','ang','eng','ing','ong','ia','iao','ian','iang','ua','uo','uai','uan','uang','ueng','üan','iong'];
+const FIN_PREFIX=new Set();
+FULL_FINALS.forEach(f=>{ for(let i=2;i<=f.length;i++) FIN_PREFIX.add(f.slice(0,i)); });
 
 /* ---------------- 易混组合 ---------------- */
 const CONFUSE = (function(){
@@ -913,7 +920,7 @@ function speak(text, cb){
    音源每个文件约 9 秒，按一/二/三/四声各读一遍，这里只自动切出需要的那一声（知识点统一用第一声）。
    取回的音频同时存进 IndexedDB，之后即使断网，也能用上准确的拼音音。 */
 const PY_AUDIO_BASE='https://pinyin.js.org/audio/';
-const NET={ mode:'unknown', probe:null, ctx:null, mem:new Map(), dec:new Map(), pending:new Set(), db:null };
+const NET={ mode:'unknown', probe:null, ctx:null, mem:new Map(), dec:new Map(), pending:new Set(), pendP:new Map(), db:null, failStreak:0 };
 
 /* 联网探测：HEAD 取一个小文件，1.5 秒内成功就算在线（比 navigator.onLine 准，能识别“连了 WiFi 但没外网”） */
 function probeOnline(){
@@ -1015,12 +1022,13 @@ function detectToneSegs(buf){
   return merged.filter(r=>(r[1]-r[0])*0.01>=0.12).map(r=>[r[0]*0.01,r[1]*0.01]);
 }
 
-/* 备好某音节的“第一声”片段：解码 → 切段 → 只留这一小段（省内存） */
+/* 备好某音节的“第一声”片段：解码 → 切段 → 只留这一小段（省内存）。
+   已在取的音节会直接返回同一个 Promise，调用方可以“等它完成”而不是白跑一遍 */
 function warmSyl(syl){
   if(NET.dec.has(syl)) return Promise.resolve(true);
-  if(NET.pending.has(syl)) return Promise.resolve(false);
+  if(NET.pendP.has(syl)) return NET.pendP.get(syl);
   NET.pending.add(syl);
-  return fetchSyl(syl).then(buf=>{
+  const p=fetchSyl(syl).then(buf=>{
     if(!buf) return false;
     const ctx=audioCtx(); if(!ctx) return false;
     return new Promise((res,rej)=>{ try{ ctx.decodeAudioData(buf.slice(0), res, rej); }catch(e){ rej(e); } })
@@ -1033,9 +1041,23 @@ function warmSyl(syl){
         const sD=ab.getChannelData(0), dD=out.getChannelData(0);
         for(let i=0;i<len;i++) dD[i]=sD[s0+i]||0;
         NET.dec.set(syl, out);
+        NET.failStreak=0;                    // 在线取音成功 → 清零失败计数
         return true;
       }).catch(()=>false);
-  }).catch(()=>false).then(v=>{ NET.pending.delete(syl); return v; });
+  }).catch(()=>false).then(v=>{ NET.pending.delete(syl); NET.pendP.delete(syl); return v; });
+  NET.pendP.set(syl,p);
+  return p;
+}
+
+/* 播放前的取音重试：最多 n 次（每次都有超时），全部失败才回落本地读音 */
+function warmSylRetry(syl, n){
+  let i=0;
+  const step=()=>warmSyl(syl).then(ok=>{
+    if(ok || NET.dec.has(syl)) return true;
+    if(++i>=n) return false;
+    return new Promise(r=>setTimeout(r,150)).then(step);
+  });
+  return step();
 }
 
 /* 播放已备好的在线拼音音节；能播返回 true，否则 false（由调用方回落内嵌库） */
@@ -1053,11 +1075,20 @@ function playSyl(syl, cb){
   return true;
 }
 
-/* 播放拼音知识点的示范音：在线拼音音备好就用它（真·拼音），否则用内嵌汉字音 */
+/* 播放拼音知识点的示范音：默认优先“网上的准确拼音音”，取音最多重试 3 次；
+   连续 3 次都取不到（确认没有网络）才改用本地内嵌读音，下次开始练习时重新探测网络 */
 function speakKps(kp, cb){
   if(!kp){ cb&&cb(); return; }
-  if(NET.mode==='online' && kp.syl && !NET.dec.has(kp.syl) && !NET.pending.has(kp.syl)) warmSyl(kp.syl);
-  if(kp.syl && playSyl(kp.syl, cb)) return;
+  if(kp.syl && NET.dec.has(kp.syl) && playSyl(kp.syl, cb)) return;
+  if(NET.mode==='online' && kp.syl){
+    warmSylRetry(kp.syl, 3).then(ok=>{
+      if(ok && playSyl(kp.syl, cb)) return;
+      NET.failStreak++;                       // 本次重试全部失败
+      if(NET.failStreak>=3) NET.mode='offline';  // 连续 3 次确认断网 → 改用本地
+      speak(kp.audio, cb);
+    }).catch(()=>speak(kp.audio, cb));
+    return;
+  }
   speak(kp.audio, cb);
 }
 
@@ -1669,7 +1700,9 @@ function startSession(){
   showScreen('screen-practice');
   renderItem();
   startTimer();
-  // 联网时，把本次练习要用到的拼音音节提前备好，发音就用“真·拼音”（断网则用内嵌读音）
+  // 每次开始练习都重新探测网络：联网时发音优先用“真·拼音”在线音源；
+  // 取音连续 3 次失败才在本次内回落本地读音（speakKps 的重试逻辑）
+  NET.probe=null; NET.failStreak=0; NET.mode='unknown';
   probeOnline().then(m=>{ if(m==='online'){ audioCtx(); prefetchKps(); } });
 }
 function segmentAt(idx){ return (session && session.segments || []).find(s=>idx>=s.from && idx<=s.to) || null; }
@@ -2008,6 +2041,7 @@ function renderBuild(item, area, foot){
     </div>
     <div class="q-tip" style="margin-top:4px">${ruby('听一听，把红色字的拼音拼出来')}</div>
     <div class="build-display" id="disp"><span class="ph">${ruby(PH)}</span></div>
+    <div class="key-log" id="keyLog"></div>
     <div class="tone-row" id="toneRow">
       ${['一声','二声','三声','四声'].map((t,i)=>`<button class="tone-btn" data-tone="${i+1}">${['ā','á','ǎ','à'][i]}<small>${ruby(t)}</small></button>`).join('')}
     </div>
@@ -2015,7 +2049,7 @@ function renderBuild(item, area, foot){
       <div class="kbd-sec">声母</div>
       ${chunk(INIT_KEYS,8).map(kbRow).join('')}
       <div class="kbd-sec">介母</div>
-      <div class="kbd-row">${MEDIAL_KEYS.map(ch=>`<button class="key" data-k="${ch}">${ch}</button>`).join('')}<span style="font-size:10px;opacity:.6;align-self:center;margin-left:5px">${ruby('放中间，如 h-u-ang→huang')}　<b style="color:#2f8ad4">V07d</b></span></div>
+      <div class="kbd-row">${MEDIAL_KEYS.map(ch=>`<button class="key" data-k="${ch}">${ch}</button>`).join('')}<span style="font-size:10px;opacity:.6;align-self:center;margin-left:5px">${ruby('放中间，如 h-u-ang→huang')}　<b style="color:#2f8ad4">V07e</b></span></div>
       <div class="kbd-sec">韵母</div>
       ${chunk(FIN_MAIN_KEYS,7).map(kbRow).join('')}
       <div class="kbd-row" style="margin-top:5px">
@@ -2029,40 +2063,44 @@ function renderBuild(item, area, foot){
     const base = canonBase(item.base);            // jü→ju 等按书写规范显示
     disp.textContent = item.tone? applyTone(base, item.tone) : base;
   }
+  function paintKeyLog(){                          // 按键记录器：显示本题已按下的每个键，方便核对
+    const el=$('#keyLog'); if(!el) return;
+    const p=item.presses||[];
+    el.textContent = p.length? '已按：'+p.slice(-10).join(' → ') : '';
+  }
   const speakBuild = ()=>{ item.word ? speakWord(item.word) : speak(item.h.h); };
   speakBuild();
   $('#miniSpeak').addEventListener('click', speakBuild);
   $('#kbd').addEventListener('click', e=>{
     const b=e.target.closest('.key'); if(!b||item.done) return;
-    if(b.id==='keyDel'){ item.base=item.base.slice(0,-1); }
-    else if(b.id==='keyClr'){ item.base=''; }
+    if(b.id==='keyDel'){ item.base=item.base.slice(0,-1); item.presses=(item.presses||[]).concat('⌫'); paintKeyLog(); }
+    else if(b.id==='keyClr'){ item.base=''; item.presses=(item.presses||[]).concat('清空'); paintKeyLog(); }
     else if(item.base.length<6){
       const k=b.dataset.k;
       const cur=decompose(item.base);                       // 当前已拼内容拆成 声母+韵母
-      const expD=decompose(item.expected.base);             // 正确答案拆成 声母+韵母
-      // j/q/x/y 后面的 ü 按书写规范写作 u（ju qu xu yu），比较时把两侧 ü 归一成 u，
-      // 这样拼 jue 时按 ü 键再按 e 也能接上（jü→jüe ≙ jue）
-      const fold = f => ('jqxy'.includes(cur.init)||'jqxy'.includes(expD.init)) ? f.replace(/ü/g,'u') : f;
-      if(cur.fin && fold(expD.fin).startsWith(fold(cur.fin+k))){
-        // 续拼优先：接上这个键能更接近正确答案就不打断——
-        // 包括拼 uan/uang 时的 n、g，也包括介母组合（h + u 接 ang → huang、x + i 接 ong → xiong）
+      // j/q/x/y 后面的 ü 按书写规范写作 u（ju qu xu yu），比较时把两侧 ü 归一成 u
+      const fold = f => 'jqxy'.includes(cur.init) ? f.replace(/ü/g,'u') : f;
+      if(cur.fin && (FIN_PREFIX.has(cur.fin+k) || FIN_PREFIX.has(fold(cur.fin+k)))){
+        // 纯拼音组合（与题目答案无关）：接上这个字母能构成/延伸出合法韵母就续拼——
+        // h-u-a-n-g → huang、a-n → an、an-g → ang、i-o-n-g → iong、u-a → hua，在任何题目里都成立
         item.base = (cur.init||'') + cur.fin + k;
-        speakKey(item.base, k, true);          // 续拼读刚拼完的韵母块（如 uang 整体读），不读声母
-      } else if(cur.fin && MEDIAL_KEYS.includes(k) && expD.fin.startsWith(k) && !expD.fin.startsWith(cur.fin)){
-        // 介母插入：已拼出韵母但目标韵母以 i/u/ü 开头（如先拼 h+ang 得 hang，再补按 u），
-        // 把介母插到声母后面变成 huang，而不是把已拼的韵母冲掉
-        item.base = (cur.init||'') + k + cur.fin;
+        speakKey(item.base, k, true);          // 续拼读刚拼完的韵母块
+      } else if(cur.init && MEDIAL_KEYS.includes(k) && (FIN_PREFIX.has(k+cur.fin) || FIN_PREFIX.has(fold(k+cur.fin)))){
+        // 介母插入：声母后已有韵母时按 i/u/ü，若「介母+已有韵母」构成合法韵母（如 u+ang=uang），
+        // 把介母插到声母后面（hang + u → huang、shang + u → shuang、xang + i → xiang）
+        item.base = cur.init + k + cur.fin;
         speakKey(item.base, k);
       } else if(KEY_IS_INIT.has(k)){
-        // 点声母：直接换掉原来的声母（原来没有就补上），韵母（含已按的介母）不动
+        // 点声母：直接换掉原来的声母，韵母（含已按的介母）不动
         item.base = k + cur.fin;
-        speakKey(item.base, k);   // 点的是声母键 → 读声母（修复替换声母后误读韵母的问题）
+        speakKey(item.base, k);   // 点的是声母键 → 读声母
       } else {
-        // 点韵母/介母键：换掉原来的韵母。声母后面第一次按 i/u/ü 就是接介母（h + u → hu）；
-        // 若这个字本来就没有声母而孩子误拼了声母，一并去掉
-        item.base = (expD.init? (cur.init||'') : '') + k;
-        speakKey(item.base, k);   // 敲一下就读这个拼音块（复韵母整读）
+        // 点韵母/介母键：换掉原来的韵母，声母保留
+        item.base = (cur.init||'') + k;
+        speakKey(item.base, k);   // 敲一下就读这个拼音块
       }
+      item.presses=(item.presses||[]).concat(k);            // 按键记录器：真实记录每次按下的键
+      paintKeyLog();
     }
     paint();
   });
@@ -2306,7 +2344,7 @@ function renderParent(){
 
   /* ⚙️ 练习参数 */
   html += `<div class="panel"><div class="h-sec" style="margin-top:0">⚙️ 练习参数</div>
-    <div class="kv">题量只作用于「每日闯关」；扫盲期与核验日会自动全覆盖，保证不漏知识点。时长上限对所有日子生效，0 表示不限。改完立即生效。<br><span style="opacity:.7">程序版本 2026-11-07d（0.1 星粒度 · 答错弹窗重试 · 组词全覆盖 · 点键替换 · 介母区/插入 · 一屏键盘）</span></div>
+    <div class="kv">题量只作用于「每日闯关」；扫盲期与核验日会自动全覆盖，保证不漏知识点。时长上限对所有日子生效，0 表示不限。改完立即生效。<br><span style="opacity:.7">程序版本 2026-11-08e（纯拼音自由组合 · 按键记录器 · 在线发音优先/重试3次 · 题型可设0 · 大按键一屏）</span></div>
     <div class="set-row"><div class="set-l">每日练习总时长<div class="set-d">单位：分钟（1–120）</div></div>
       <input type="number" data-set="minutes" value="${s.minutes}" min="1" max="120"></div>
     <div class="set-row"><div class="set-l">今日已用时长<div class="set-d">已累计 ${Math.round(usedSecondsToday()/60)} 分钟；页面切后台/锁屏时会自动暂停计时</div></div>
@@ -2314,7 +2352,7 @@ function renderParent(){
 
     <div class="set-sub">各题型题量</div>
     <div class="set-row"><div class="set-l">🔍 拼音小侦探<div class="set-d">每轮 6 张卡片，这里设置几轮</div></div>
-      <input type="number" data-set="counts.drag" value="${s.counts.drag}" min="1" max="8"></div>
+      <input type="number" data-set="counts.drag" value="${s.counts.drag}" min="0" max="8"></div>
     <div class="set-row"><div class="set-l">🎧 卡片找朋友<div class="set-d">听音选拼音的题数</div></div>
       <input type="number" data-set="counts.listen" value="${s.counts.listen}" min="0" max="15"></div>
     <div class="set-row"><div class="set-l">🧩 汉字拼拼乐<div class="set-d">敲键盘拼音节的题数</div></div>
