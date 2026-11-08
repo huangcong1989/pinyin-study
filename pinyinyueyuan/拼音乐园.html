@@ -8,7 +8,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>拼音乐园 V07e</title>
+<title>拼音乐园</title>
 <script>
 /* 全局错误可视化：任何 JS 错误立即在页面顶部显示红条（不再静默失败） */
 window.addEventListener('error', function(e){
@@ -21,13 +21,6 @@ window.addEventListener('error', function(e){
 window.addEventListener('unhandledrejection', function(e){
   var b=document.getElementById('errBanner');
   if(b) b.textContent='⚠ 异步错误: '+(e.reason&&e.reason.message||e.reason);
-});
-/* 常驻版本角标：任何界面都能看到，用于确认加载的是哪个版本 */
-document.addEventListener('DOMContentLoaded', function(){
-  if(document.getElementById('verChip')) return;
-  var c=document.createElement('div'); c.id='verChip'; c.textContent='V07e';
-  c.style.cssText='position:fixed;bottom:4px;right:6px;z-index:9998;font:900 11px monospace;color:#2f8ad4;opacity:.6;pointer-events:none';
-  document.body.appendChild(c);
 });
 </script>
 <style>
@@ -2049,7 +2042,7 @@ function renderBuild(item, area, foot){
       <div class="kbd-sec">声母</div>
       ${chunk(INIT_KEYS,8).map(kbRow).join('')}
       <div class="kbd-sec">介母</div>
-      <div class="kbd-row">${MEDIAL_KEYS.map(ch=>`<button class="key" data-k="${ch}">${ch}</button>`).join('')}<span style="font-size:10px;opacity:.6;align-self:center;margin-left:5px">${ruby('放中间，如 h-u-ang→huang')}　<b style="color:#2f8ad4">V07e</b></span></div>
+      <div class="kbd-row">${MEDIAL_KEYS.map(ch=>`<button class="key" data-k="${ch}">${ch}</button>`).join('')}<span style="font-size:10px;opacity:.6;align-self:center;margin-left:5px">${ruby('介母放中间，如 h-u-ang → huang')}</span></div>
       <div class="kbd-sec">韵母</div>
       ${chunk(FIN_MAIN_KEYS,7).map(kbRow).join('')}
       <div class="kbd-row" style="margin-top:5px">
@@ -2344,7 +2337,7 @@ function renderParent(){
 
   /* ⚙️ 练习参数 */
   html += `<div class="panel"><div class="h-sec" style="margin-top:0">⚙️ 练习参数</div>
-    <div class="kv">题量只作用于「每日闯关」；扫盲期与核验日会自动全覆盖，保证不漏知识点。时长上限对所有日子生效，0 表示不限。改完立即生效。<br><span style="opacity:.7">程序版本 2026-11-08e（纯拼音自由组合 · 按键记录器 · 在线发音优先/重试3次 · 题型可设0 · 大按键一屏）</span></div>
+    <div class="kv">题量只作用于「每日闯关」；扫盲期与核验日会自动全覆盖，保证不漏知识点。时长上限对所有日子生效，0 表示不限。改完立即生效。<br><span style="opacity:.7">程序版本 正式版 V1.0（2026-11-08）</span></div>
     <div class="set-row"><div class="set-l">每日练习总时长<div class="set-d">单位：分钟（1–120）</div></div>
       <input type="number" data-set="minutes" value="${s.minutes}" min="1" max="120"></div>
     <div class="set-row"><div class="set-l">今日已用时长<div class="set-d">已累计 ${Math.round(usedSecondsToday()/60)} 分钟；页面切后台/锁屏时会自动暂停计时</div></div>
